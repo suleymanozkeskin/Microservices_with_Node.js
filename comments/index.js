@@ -45,6 +45,15 @@ app.post('/posts/:id/comments', (req, res) => {
 
 
 
+// Receive events from the event bus
+app.post('/events', (req, res) => {
+    console.log('Received Event', req.body.type);
+
+    res.send({});
+    }
+);
+
+
 
 // Since we are using the same port as the posts service, we need to change the port number to 4001
 app.listen(4001, () => {
