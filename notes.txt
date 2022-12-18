@@ -1,0 +1,8 @@
+In the current structure of the app;
+
+We have three services: Post service, Comments Service and Query Service.
+
+We have an event bus. When one of this services is used Event bus receives this information and informs the other services about what happened.
+
+For instance, when a user creates a comments to a post; Event-bus receives this information and notifies the query and post service about it.Then the query service will  provide full listing of posts and relevant comments.
+
