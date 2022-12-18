@@ -1,1 +1,2 @@
-# blog_with_Node_JS
+A blog application built with NodeJS and React. 
+This repository is currently on progress.
