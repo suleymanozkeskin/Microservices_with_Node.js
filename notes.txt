@@ -6,3 +6,11 @@ We have an event bus. When one of this services is used Event bus receives this 
 
 For instance, when a user creates a comments to a post; Event-bus receives this information and notifies the query and post service about it.Then the query service will  provide full listing of posts and relevant comments.
 
+
+
+A diagram that shows flow between services will be added soon.
+
+
+Current state as of 21.12.2022 ; App has  query , moderation , posts , comments and event-bus services. In case query service breaks down , new comments  or posts will not be moderated,
+however as soon as query service is up and running again ; everything that happened in the absence of query service will be checked and moderated if necessary.
+
