@@ -21,7 +21,7 @@ app.get('/posts/:id/comments', (req, res) => {
 );
 
 
-app.post('/posts/:id/comments', (req, res) => {
+app.post('/posts/:id/comments', async (req, res) => {
     
     const commentId = randomBytes(4).toString('hex'); // Generate a random id
     
@@ -29,13 +29,17 @@ app.post('/posts/:id/comments', (req, res) => {
     
     const comments = commentsbyPostId[req.params.id] || []; // If there are no comments for this post, create an empty array
     
-    comments.push({ id: commentId, content}); // Add the comment to the array
+    comments.push({ id: commentId, content,status: "pending"}); // Add the comment to the array
     
     commentsbyPostId[req.params.id] = comments; // Add the comments to the commentsbyPostId object
 
-    axios.post('http://localhost:4005/events', { // Notify the event bus that a comment has been created
+    await axios.post('http://localhost:4005/events', { // Notify the event bus that a comment has been created
         type: 'CommentCreated',
-        data: {id: commentId, content, postId: req.params.id} // Send the comment id, content and post id that the comment belongs to
+        data: {
+            id: commentId,
+            content,
+            postId: req.params.id,
+            status: "pending"} // Send the comment id, content and post id that the comment belongs to
     });
 
     
@@ -46,13 +50,33 @@ app.post('/posts/:id/comments', (req, res) => {
 
 
 // Receive events from the event bus
-app.post('/events', (req, res) => {
-    console.log('Received Event', req.body.type);
-
-    res.send({});
+app.post("/events", async (req, res) => {
+    console.log("Event Received:", req.body.type);
+  
+    const { type, data } = req.body;
+  
+    if (type === "CommentModerated") {
+      const { postId, id, status, content } = data;
+      const comments = commentsbyPostId[postId];
+  
+      const comment = comments.find((comment) => {
+        return comment.id === id;
+      });
+      comment.status = status;
+  
+      await axios.post("http://localhost:4005/events", {
+        type: "CommentUpdated",
+        data: {
+          id,
+          status,
+          postId,
+          content,
+        },
+      });
     }
-);
-
+  
+    res.send({});
+  });
 
 
 // Since we are using the same port as the posts service, we need to change the port number to 4001
