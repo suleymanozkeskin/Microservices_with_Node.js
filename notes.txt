@@ -15,4 +15,7 @@ as of 21.12.2022 ; App has  query , moderation , posts , comments and event-bus 
 however as soon as query service is up and running again ; everything that happened in the absence of query service will be checked and moderated if necessary.
 
 
-Current state of the app 23.12.2022:  
+Current state of the app 23.12.2022:  Each of microservices has been dockerized in automated manner with main.py file. This file contains a script that build images for each service and runs them.Has a function to stop all active services upon request.
+
+Next up: Kubernetes
+
