@@ -1,2 +1,2 @@
-A blog application built with NodeJS and React. 
+A blog application with a microservice structure. Built with NodeJS and React.
 This repository is currently on progress.
